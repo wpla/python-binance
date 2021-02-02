@@ -4,6 +4,7 @@ import hashlib
 import hmac
 import requests
 import time
+import numpy as np
 from operator import itemgetter
 from .helpers import date_to_milliseconds, interval_to_milliseconds
 from .exceptions import BinanceAPIException, BinanceRequestException, BinanceWithdrawException
@@ -11,9 +12,9 @@ from .exceptions import BinanceAPIException, BinanceRequestException, BinanceWit
 
 class Client(object):
 
-    API_URL = 'https://api.binance.{}/api'
-    WITHDRAW_API_URL = 'https://api.binance.{}/wapi'
-    MARGIN_API_URL = 'https://api.binance.{}/sapi'
+    API_URL = 'https://{}.binance.{}/api'
+    WITHDRAW_API_URL = 'https://{}.binance.{}/wapi'
+    MARGIN_API_URL = 'https://{}.binance.{}/sapi'
     WEBSITE_URL = 'https://www.binance.{}'
     FUTURES_URL = 'https://fapi.binance.{}/fapi'
     PUBLIC_API_VERSION = 'v1'
@@ -77,7 +78,7 @@ class Client(object):
     AGG_BUYER_MAKES = 'm'
     AGG_BEST_MATCH = 'M'
 
-    def __init__(self, api_key=None, api_secret=None, requests_params=None, tld='com'):
+    def __init__(self, api_key=None, api_secret=None, requests_params=None, tld='com', api=None):
         """Binance API Client constructor
 
         :param api_key: Api Key
@@ -89,9 +90,12 @@ class Client(object):
 
         """
 
-        self.API_URL = self.API_URL.format(tld)
-        self.WITHDRAW_API_URL = self.WITHDRAW_API_URL.format(tld)
-        self.MARGIN_API_URL = self.MARGIN_API_URL.format(tld)
+        if not api:
+            api = np.random.choice(["api", "api1", "api2", "api3"])
+
+        self.API_URL = self.API_URL.format(api, tld)
+        self.WITHDRAW_API_URL = self.WITHDRAW_API_URL.format(api, tld)
+        self.MARGIN_API_URL = self.MARGIN_API_URL.format(api, tld)
         self.WEBSITE_URL = self.WEBSITE_URL.format(tld)
         self.FUTURES_URL = self.FUTURES_URL.format(tld)
 
