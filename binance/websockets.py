@@ -28,7 +28,7 @@ class BinanceClientProtocol(WebSocketClientProtocol):
             except ValueError:
                 pass
             else:
-                self.factory.callback(payload_obj)
+                self.factory.signal_callback(payload_obj)
 
 
 class BinanceReconnectingClientFactory(ReconnectingClientFactory):
